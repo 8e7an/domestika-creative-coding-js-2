@@ -26,101 +26,101 @@ const sketch = () => {
     context.strokeStyle = 'blue';
     //context.save();
 
-	/*
-	// Basic rectangle 
-	context.translate(x, y);
+    /*
+    // Basic rectangle 
+    context.translate(x, y);
     context.strokeRect(w * -0.5, h * -0.5, w, h);
-	*/
-
-	/*
-	// Path rectangle 1
-	context.translate(x, y);
-	context.beginPath();
-	context.moveTo(w * -0.5, h * -0.5);
-	context.lineTo(w *  0.5, h * -0.5);
-	context.lineTo(w *  0.5, h *  0.5);
-	context.lineTo(w * -0.5, h *  0.5);
-	context.closePath();
-	context.stroke();
-	*/
-
-	/*
-	// Path rectangle 2
-	context.translate(x, y);
-	context.translate(w * -0.5, h * -0.5);
-	context.beginPath();
-	context.moveTo(0, 0);
-	context.lineTo(w, 0);
-	context.lineTo(w, h);
-	context.lineTo(0, h);
-	context.closePath();
-	context.stroke();
-	*/
+    */
 
     /*
-	// Draw an angled line
-	radius = 200;
-	angle = math.degToRad(30);
+    // Path rectangle 1
+    context.translate(x, y);
+    context.beginPath();
+    context.moveTo(w * -0.5, h * -0.5);
+    context.lineTo(w *  0.5, h * -0.5);
+    context.lineTo(w *  0.5, h *  0.5);
+    context.lineTo(w * -0.5, h *  0.5);
+    context.closePath();
+    context.stroke();
+    */
 
-	context.translate(x, y);
+    /*
+    // Path rectangle 2
+    context.translate(x, y);
+    context.translate(w * -0.5, h * -0.5);
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(w, 0);
+    context.lineTo(w, h);
+    context.lineTo(0, h);
+    context.closePath();
+    context.stroke();
+    */
 
-	x = Math.cos(angle) * radius;
-	y = Math.sin(angle) * radius;
+    /*
+    // Draw an angled line
+    radius = 200;
+    angle = math.degToRad(30);
 
-	context.beginPath()
-	context.moveTo(0, 0);
-	context.lineTo(x, y);
-	context.stroke();
-	*/
+    context.translate(x, y);
+
+    x = Math.cos(angle) * radius;
+    y = Math.sin(angle) * radius;
+
+    context.beginPath()
+    context.moveTo(0, 0);
+    context.lineTo(x, y);
+    context.stroke();
+    */
 
     /*
     // Skewed rectangle
-	angle = math.degToRad(30);
-	//angle = math.degToRad(frame);
-	rx = Math.cos(angle) * w;
-	ry = Math.sin(angle) * w;
-	context.translate(x, y);
-	context.translate(rx * -0.5, (ry + h) * -0.5);
-	context.beginPath();
-	context.moveTo(0, 0);
-	context.lineTo(rx, ry);
-	context.lineTo(rx, ry + h);
-	context.lineTo(0, h);
-	context.closePath();
-	context.stroke();
-	*/
+    angle = math.degToRad(30);
+    //angle = math.degToRad(frame);
+    rx = Math.cos(angle) * w;
+    ry = Math.sin(angle) * w;
+    context.translate(x, y);
+    context.translate(rx * -0.5, (ry + h) * -0.5);
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(rx, ry);
+    context.lineTo(rx, ry + h);
+    context.lineTo(0, h);
+    context.closePath();
+    context.stroke();
+    */
 
-	//context.restore();
+    //context.restore();
 
-	context.translate(x, y);
-	degrees = -45;
-	w = 1024;
-	h = 340;
-	drawSkewedRect({ context, degrees });
-	drawSkewedRect({ h, context, w, degrees });
+    context.translate(x, y);
+    degrees = -45;
+    w = 1024;
+    h = 340;
+    drawSkewedRect({ context, degrees });
+    drawSkewedRect({ h, context, w, degrees });
 
-	// Note with destructuring { ... } as the arguments to the function call
-	// the variable names don't have to match the argument names - just
-	// have to be the name name(s).
+    // Note with destructuring { ... } as the arguments to the function call
+    // the variable names don't have to match the argument names - just
+    // have to be the name name(s).
 
   };
 };
 
-const drawSkewedRect = ({ context, w=600, h=200, degrees=45 }) => {
-	const angle = math.degToRad(degrees);
-	const rx = Math.cos(angle) * w;
-	const ry = Math.sin(angle) * w;
+  const drawSkewedRect = ({ context, w=600, h=200, degrees=45 }) => {
+  const angle = math.degToRad(degrees);
+  const rx = Math.cos(angle) * w;
+  const ry = Math.sin(angle) * w;
 
-    context.save();
-	context.translate(rx * -0.5, (ry + h) * -0.5);
-	context.beginPath();
-	context.moveTo(0, 0);
-	context.lineTo(rx, ry);
-	context.lineTo(rx, ry + h);
-	context.lineTo(0, h);
-	context.closePath();
-	context.stroke();
-	context.restore();
+  context.save();
+  context.translate(rx * -0.5, (ry + h) * -0.5);
+  context.beginPath();
+  context.moveTo(0, 0);
+  context.lineTo(rx, ry);
+  context.lineTo(rx, ry + h);
+  context.lineTo(0, h);
+  context.closePath();
+  context.stroke();
+  context.restore();
 };
 
 canvasSketch(sketch, settings);
