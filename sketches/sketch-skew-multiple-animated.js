@@ -9,7 +9,7 @@ const risoColors = require('riso-colors');
 
 const settings = {
   dimensions: [ 1080, 1080 ],
-  //animate: true,
+  animate: true,
 };
 
 const sketch = ({ context, width, height }) => {
@@ -36,6 +36,9 @@ const sketch = ({ context, width, height }) => {
     blendMode = random.value() > 0.5 ? 'overlay' : 'source-over';
     fill = random.pick(rectColors).hex;
     stroke = random.pick(rectColors).hex;
+
+    lineWidth = 0;
+
     rects.push({ x, y, w, h, fill, stroke, lineWidth, blendMode, midx, midy });
   }
 
@@ -88,23 +91,12 @@ const sketch = ({ context, width, height }) => {
 
       context.restore();
 
-
-
-
-      // let rx = Math.cos(angle) * dist;
-      // let ry = Math.sin(angle) * dist;
-      // let rxh = rx * 0.5;
-      // let offsetWidth = (width - dirx) + rxh;
-      // let offsetHeight = ry + (Math.tan(angle) * offsetWidth);
-
-
-
-
       // Rectangle is beyond the left side of the canvas 
       if (rect.x + Math.ceil(Math.cos(angle) * w * 0.5) + lineWidth < 0) {
-        //debugger
-        rect.x = width + Math.ceil(Math.cos(angle) * w * 0.5); 
-        rect.y = 0; //Math.sin(angle) * width;
+
+        rect.x = midx + (width - midx) + (Math.cos(angle) * w * 0.5);
+        rect.y = midy + (Math.tan(angle) * ( (width - midx) + (Math.cos(angle) * w * 0.5) ));
+
       }
       // Rectangle is beyond the right side of the canvas 
       //else if (rect.x > width) {
@@ -124,7 +116,19 @@ const sketch = ({ context, width, height }) => {
         rect.y += diry * ry;
       }
 
+      // Draw circle in the middle of the skewed rectangle
       drawCircle({ context, midx, midy });
+
+      /*
+      //let _w = midx + (Math.cos(angle) * w * 0.5);
+      let _w = midx + (width - midx) + (Math.cos(angle) * w * 0.5);
+      let color = 'red';
+      drawCircle({ context, midx:_w, midy:midy, color });
+
+      let _w2 = midy + (Math.tan(angle) * ( (width - midx) + (Math.cos(angle) * w * 0.5) ));
+      let color2 = 'lime';
+      drawCircle({ context, midx:_w, midy:_w2, color:color2 });
+      */
 
     });
 
@@ -137,6 +141,8 @@ const drawSkewedRect = ({ context, w=600, h=200, degrees=45 }) => {
   const rx = Math.cos(angle) * w;
   const ry = Math.sin(angle) * w;
 
+  // Offset the triangle drawing path to effectively make the
+  // origin the centre
   context.translate(rx * -0.5, (ry + h) * -0.5);
   context.beginPath();
   context.moveTo(0, 0);
@@ -147,9 +153,9 @@ const drawSkewedRect = ({ context, w=600, h=200, degrees=45 }) => {
 };
 
 // Small circle
-const drawCircle = ({ context, midx, midy }) => {
+const drawCircle = ({ context, midx, midy, color='navy' }) => {
   //context.save();
-  context.fillStyle = 'navy';
+  context.fillStyle = color;
   context.beginPath();
   context.strokeStyle = null;
   context.arc(midx, midy, 10, 0, Math.PI * 2);
