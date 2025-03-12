@@ -8,11 +8,26 @@ const Color = require('canvas-sketch-util/color');
 const risoColors = require('riso-colors');
 
 const settings = {
+  name: 'sketch skewed multiple polygon masked',
   dimensions: [ 1080, 1080 ],
   //animate: true,
 };
 
 const sketch = ({ context, width, height }) => {
+
+  random.setSeed(Date.now());
+  //random.setSeed(1741753470280);
+  //random.setSeed(random.getRandomSeed());
+
+  /*
+  random.setSeed(555);
+  console.log(random.value());
+  console.log(random.value());
+  console.log(random.value());
+
+  random.setSeed(random.getRandomSeed());
+  */
+  console.log(`Random seed: %s`, random.getSeed());
 
   const nums = 40; //20;
   const rects = [];
