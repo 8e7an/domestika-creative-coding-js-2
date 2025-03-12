@@ -22,9 +22,18 @@ const sketch = ({ context, width, height }) => {
     //random.pick(risoColors),
   ];
   const bgColor = random.pick(risoColors).hex;
+  const degrees = -30;
+  //const radius=300
+
+  const mask = {
+    radius: width * 0.4,
+    sides: 3,
+    x: width * 0.5,
+    y: height * 0.58,
+  };
 
   let x, y, w, h, fill, stroke, lineWidth, blendMode;
-  let degrees = -30;
+
 
   //
   for (let i=0; i<nums; i++) {
@@ -45,17 +54,40 @@ const sketch = ({ context, width, height }) => {
 
     rects.push({ x, y, w, h, fill, stroke, lineWidth, blendMode });
   }
-
+  
+  //
   return ({ context, width, height }) => {
 
     // Clear the canvas
     context.fillStyle = bgColor; context.fillRect(0, 0, width, height);
+
+    context.save();
+
+    /*
+    context.translate(width * 0.5, height * 0.5);
+
+    // Clipping rectangle
+    context.beginPath();
+    context.moveTo(0, -300);
+    context.lineTo(300, 200);
+    context.lineTo(-300, 200);
+    context.closePath();
+    context.clip();
+    //context.restore();
+    */
+    
+    context.translate(mask.x, mask.y);
+
+    // Polygon mask
+    drawPolygon({ context, radius: mask.radius, sides: mask.sides });
+    context.clip();
 
     rects.forEach((rect) => {
       const { x, y, w, h, fill, stroke, lineWidth, blendMode } = rect;
 
       context.save();
 
+      context.translate(-mask.x, -mask.y);
       context.translate(x, y);
 
       context.strokeStyle = stroke;
@@ -87,6 +119,21 @@ const sketch = ({ context, width, height }) => {
       context.restore();
     });
 
+    context.restore();
+
+    context.save();
+    context.translate(mask.x, mask.y);
+    
+    // Polygon draw
+    drawPolygon({ context, radius: mask.radius - context.lineWidth, sides: mask.sides });
+    
+    context.globalCompositeOperation = 'color-burn';
+    context.lineWidth = 10;
+    context.strokeStyle = rectColors[0].hex;
+    context.stroke();
+
+    context.restore();
+
   };
 };
 
@@ -101,6 +148,20 @@ const drawSkewedRect = ({ context, w=600, h=200, degrees=45 }) => {
   context.lineTo(rx, ry);
   context.lineTo(rx, ry + h);
   context.lineTo(0, h);
+  context.closePath();
+};
+
+const drawPolygon = ({ context, radius=100, sides=6 }) => {
+  const slice = Math.PI * 2 / sides; // 2 radians (360 degrees) divided by the sides
+
+  context.beginPath();
+  context.moveTo(0, -radius);
+
+  for (let i=1; i<sides; i++) {
+    const theta = i * slice - Math.PI * 0.5;
+    context.lineTo(Math.cos(theta) * radius, Math.sin(theta) * radius);
+  }
+
   context.closePath();
 };
 
