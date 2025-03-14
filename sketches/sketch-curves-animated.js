@@ -17,8 +17,8 @@ const sketch = ({ width, height }) => {
   const colorMaps = ['jet', 'hsv', 'cubehelix', 'bluered', 'winter',
     'inferno', 'rainbow', 'rainbow-soft', 'magma', 'salinity', 'autumn', 'copper'];
 
-  const cols = 12;
-  const rows = 40;
+  const cols = 72;
+  const rows = 8;
   const numCells = cols * rows;
 
   // grid
@@ -47,7 +47,7 @@ const sketch = ({ width, height }) => {
     n = random.noise2D(x, y, frequency, amplitude);
     x += n;
     y += n;
-    lineWidth = math.mapRange(n, -amplitude, amplitude, 2, 20);
+    lineWidth = math.mapRange(n, -amplitude, amplitude, 0, 5);
     color = colors[Math.floor(math.mapRange(n, -amplitude, amplitude, 0, amplitude))];
     points.push(new Point({ x, y, lineWidth, color }));
   }
