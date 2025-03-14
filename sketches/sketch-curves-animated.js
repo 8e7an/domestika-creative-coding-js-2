@@ -1,13 +1,22 @@
 // https://www.domestika.org/en/courses/3862-creative-coding-2-0-in-js-animation-sound-color/units/14952-curves
 // sketch-curves-animated.js
+//
+// CMD + SHIFT + s to save output to MP4 file.
+// This uses the (installed) ffmpeg installer node module:
+// https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg
+// From the Terminal use the command:
+// canvas-sketch sketch-curves-animated --output=output/curves --stream
+//
 
 const canvasSketch = require('canvas-sketch');
 const random = require('canvas-sketch-util/random');
 const math = require('canvas-sketch-util/math');
+// https://github.com/bpostlethwaite/colormap
 const colormap = require('colormap');
 
 const settings = {
-  dimensions: [ 1080, 1080 ]
+  dimensions: [ 1080, 1080 ],
+  animate: true,
 };
 
 const sketch = ({ width, height }) => {
@@ -45,14 +54,14 @@ const sketch = ({ width, height }) => {
     x = (i % cols) * cw;
     y = Math.floor(i / cols) * ch;
     n = random.noise2D(x, y, frequency, amplitude);
-    x += n;
-    y += n;
+    //x += n;
+    //y += n;
     lineWidth = math.mapRange(n, -amplitude, amplitude, 0, 5);
     color = colors[Math.floor(math.mapRange(n, -amplitude, amplitude, 0, amplitude))];
     points.push(new Point({ x, y, lineWidth, color }));
   }
 
-  return ({ context, width, height }) => {
+  return ({ context, width, height, frame }) => {
 
     // Clear the canvas to black
     context.fillStyle = 'black'; context.fillRect(0, 0, width, height);
@@ -63,9 +72,16 @@ const sketch = ({ width, height }) => {
     context.strokeStyle = 'orange';
     context.lineWidth = 4;
 
+    // Update positions
+    points.forEach((point) => {
+      n = random.noise2D(point.ix + frame * 3, point.iy, frequency, amplitude);
+      point.x = point.ix + n;
+      point.y = point.iy + n;
+    });
+
     let lastx, lasty;
 
-    //draw curves based on Point objects in the points array
+    // Draw curves based on Point objects in the points array
     for (let r=0; r<rows; r++) {
       for (let c=0; c<cols-1; c++) {
         const curr = points[r * cols + c + 0];
@@ -84,7 +100,7 @@ const sketch = ({ width, height }) => {
       }
     }
 
-    //draw points
+    // Draw points
     if (drawPoints) {
       points.forEach((point) => {
         point.draw(context);
@@ -104,6 +120,8 @@ class Point {
     this.y = y;
     this.lineWidth = lineWidth;
     this.color = color;
+    this.ix = x;
+    this.iy = y;
   }
   draw(context) {
     context.save();
