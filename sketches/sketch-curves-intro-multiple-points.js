@@ -36,14 +36,6 @@ const sketch = ({ canvas }) => {
       context.lineTo(points[i].x, points[i].y);
     }
     context.stroke();
-/*
-    context.beginPath();
-    context.moveTo(points[0].x, points[0].y);
-    for (let i=1; i<points.length; i+=2) {
-      context.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
-    }
-    context.stroke();
-*/
 
     context.strokeStyle = 'blue';
     context.lineWidth = 4;
@@ -91,7 +83,7 @@ const onMouseMove = (evt) => {
   //console.log(x, y);
 
   points.forEach((point) => {
-    if (point.isDragging) {
+    if (point.isDragging && evt.target == canvasElement) {
       point.x = x;
       point.y = y;
     }
